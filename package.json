@@ -3,7 +3,7 @@
 	"version": "0.1.1",
 	"description": "n8n community node for Eranol FFmpeg media processing API",
 	"license": "MIT",
-	"homepage": "https://github.com/eranol/n8n-nodes-eranol",
+	"homepage": "https://github.com/harshalone/n8n-nodes-eranol",
 	"keywords": [
 		"n8n-community-node-package",
 		"n8n",
@@ -15,11 +15,12 @@
 	],
 	"author": {
 		"name": "Eranol",
+		"email": "harshalone@gmail.com",
 		"url": "https://www.eranol.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/eranol/n8n-nodes-eranol.git"
+		"url": "https://github.com/harshalone/n8n-nodes-eranol.git"
 	},
 	"scripts": {
 		"build": "n8n-node build",
