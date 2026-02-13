@@ -1,0 +1,51 @@
+{
+	"name": "n8n-nodes-eranol",
+	"version": "0.1.0",
+	"description": "n8n community node for Eranol FFmpeg media processing API",
+	"license": "MIT",
+	"homepage": "https://github.com/eranol/n8n-nodes-eranol",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"ffmpeg",
+		"video",
+		"audio",
+		"media",
+		"eranol"
+	],
+	"author": {
+		"name": "Eranol",
+		"url": "https://www.eranol.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/eranol/n8n-nodes-eranol.git"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"credentials": [
+			"dist/credentials/EranolApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Eranol/Eranol.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "latest",
+		"typescript": "~5.7.0"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

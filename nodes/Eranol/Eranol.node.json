@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-eranol.eranol",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Miscellaneous"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://www.eranol.com/documentation"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://www.eranol.com/documentation"
+			}
+		]
+	}
+}
