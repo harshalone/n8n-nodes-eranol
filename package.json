@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-eranol",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "n8n community node for Eranol FFmpeg media processing API",
 	"license": "MIT",
 	"homepage": "https://github.com/harshalone/n8n-nodes-eranol",
