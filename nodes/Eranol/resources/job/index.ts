@@ -2,6 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 import { getStatusDescription } from './getStatus';
 import { getResultDescription } from './getResult';
 import { deleteJobDescription } from './deleteJob';
+import { verifyDescription } from './verify';
 
 export const jobDescription: INodeProperties[] = [
 	{
@@ -16,14 +17,14 @@ export const jobDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Get Status',
-				value: 'getStatus',
-				action: 'Get job status',
-				description: 'Retrieve current job status, progress, and completion data',
+				name: 'Delete',
+				value: 'deleteJob',
+				action: 'Delete a job',
+				description: 'Remove a job and its associated output file',
 				routing: {
 					request: {
-						method: 'GET',
-						url: '=/ffmpeg/status/{{$parameter.jobId}}',
+						method: 'DELETE',
+						url: '=/ffmpeg/jobs/{{$parameter.jobId}}',
 					},
 				},
 			},
@@ -40,14 +41,26 @@ export const jobDescription: INodeProperties[] = [
 				},
 			},
 			{
-				name: 'Delete',
-				value: 'deleteJob',
-				action: 'Delete a job',
-				description: 'Remove a job and its associated output file',
+				name: 'Get Status',
+				value: 'getStatus',
+				action: 'Get job status',
+				description: 'Retrieve current job status, progress, and completion data',
 				routing: {
 					request: {
-						method: 'DELETE',
-						url: '=/ffmpeg/jobs/{{$parameter.jobId}}',
+						method: 'GET',
+						url: '=/ffmpeg/status/{{$parameter.jobId}}',
+					},
+				},
+			},
+			{
+				name: 'Verify API Key',
+				value: 'verify',
+				action: 'Verify API key',
+				description: 'Check that the API key is valid and retrieve account details',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '/verify',
 					},
 				},
 			},
@@ -57,4 +70,5 @@ export const jobDescription: INodeProperties[] = [
 	...getStatusDescription,
 	...getResultDescription,
 	...deleteJobDescription,
+	...verifyDescription,
 ];

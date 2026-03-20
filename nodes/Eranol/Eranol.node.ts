@@ -9,6 +9,8 @@ import { audioDescription } from './resources/audio';
 import { convertDescription } from './resources/convert';
 import { composeDescription } from './resources/compose';
 import { jobDescription } from './resources/job';
+import { imageDescription } from './resources/image';
+import { notifyDescription } from './resources/notify';
 
 export class Eranol implements INodeType {
 	description: INodeTypeDescription = {
@@ -58,8 +60,16 @@ export class Eranol implements INodeType {
 						value: 'convert',
 					},
 					{
+						name: 'Image',
+						value: 'image',
+					},
+					{
 						name: 'Job',
 						value: 'job',
+					},
+					{
+						name: 'Notify',
+						value: 'notify',
 					},
 					{
 						name: 'Video',
@@ -72,6 +82,8 @@ export class Eranol implements INodeType {
 			...audioDescription,
 			...convertDescription,
 			...composeDescription,
+			...imageDescription,
+			...notifyDescription,
 			...jobDescription,
 		],
 		usableAsTool: true,
