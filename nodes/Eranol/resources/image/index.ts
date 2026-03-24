@@ -23,6 +23,7 @@ export const imageDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/image',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},

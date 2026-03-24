@@ -24,6 +24,7 @@ export const audioDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/audio/denoise',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -36,6 +37,7 @@ export const audioDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/audio/highlights',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -48,6 +50,7 @@ export const audioDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/audio/remove-silence',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},

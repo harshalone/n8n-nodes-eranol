@@ -24,6 +24,7 @@ export const composeDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/concat',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -36,6 +37,7 @@ export const composeDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/compose',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -48,6 +50,7 @@ export const composeDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/merge',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},

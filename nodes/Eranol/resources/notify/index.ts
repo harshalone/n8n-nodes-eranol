@@ -22,6 +22,7 @@ export const notifyDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/notifications/email',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},

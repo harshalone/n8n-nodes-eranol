@@ -33,6 +33,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/add-intro',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -45,6 +46,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/add-outro',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -57,6 +59,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/caption',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -69,6 +72,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/extract/audio',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -81,6 +85,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/extract/images',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -93,6 +98,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/extract/gif',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -105,6 +111,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/overlay',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -117,6 +124,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/progress-bar',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -129,6 +137,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/reframe',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -141,6 +150,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/thumbnail',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -153,6 +163,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/trim',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -165,6 +176,7 @@ export const videoDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/video/watermark',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},

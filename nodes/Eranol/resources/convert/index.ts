@@ -27,6 +27,7 @@ export const convertDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/convert/audio/to/mp3',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -39,6 +40,7 @@ export const convertDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/convert/audio/to/wav',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -51,6 +53,7 @@ export const convertDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/convert/image/to/jpg',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -63,6 +66,7 @@ export const convertDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/convert/image/to/webp',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -75,6 +79,7 @@ export const convertDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/convert/video/to/mp4',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
@@ -87,6 +92,7 @@ export const convertDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/ffmpeg/convert/video/to/webm',
+						headers: { 'Content-Type': 'application/json' },
 					},
 				},
 			},
