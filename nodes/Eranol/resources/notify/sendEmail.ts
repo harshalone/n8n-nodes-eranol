@@ -9,12 +9,47 @@ const displayOptions = {
 
 export const sendEmailDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['notify'],
+				operation: ['sendEmail'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'To',
 		name: 'to',
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['notify'],
+				operation: ['sendEmail'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Recipient email address',
 		routing: {
 			send: {
@@ -29,7 +64,13 @@ export const sendEmailDescription: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['notify'],
+				operation: ['sendEmail'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Email subject line',
 		routing: {
 			send: {
@@ -44,7 +85,13 @@ export const sendEmailDescription: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['notify'],
+				operation: ['sendEmail'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'HTML email body',
 		typeOptions: {
 			rows: 5,

@@ -9,6 +9,35 @@ const displayOptions = {
 
 export const mergeDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['merge'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'Images',
 		name: 'images',
 		type: 'fixedCollection',
@@ -17,7 +46,13 @@ export const mergeDescription: INodeProperties[] = [
 		},
 		required: true,
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['merge'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Image slides to combine into video',
 		options: [
 			{
@@ -57,7 +92,13 @@ export const mergeDescription: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['merge'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'URL of the audio track',
 		routing: {
 			send: {
@@ -72,7 +113,13 @@ export const mergeDescription: INodeProperties[] = [
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['merge'],
+				useJsonBody: [false],
+			},
+		},
 		options: [
 			{
 				displayName: 'Audio Mode',
@@ -206,7 +253,6 @@ export const mergeDescription: INodeProperties[] = [
 					},
 				},
 			},
-
 		],
 	},
 ];

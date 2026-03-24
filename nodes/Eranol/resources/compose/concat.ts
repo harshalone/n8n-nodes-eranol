@@ -9,6 +9,35 @@ const displayOptions = {
 
 export const concatDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['concat'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'Clips',
 		name: 'clips',
 		type: 'fixedCollection',
@@ -17,7 +46,13 @@ export const concatDescription: INodeProperties[] = [
 		},
 		required: true,
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['concat'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Video clips to concatenate in order',
 		options: [
 			{

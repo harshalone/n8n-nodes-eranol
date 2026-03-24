@@ -9,12 +9,47 @@ const displayOptions = {
 
 export const reframeDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['reframe'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'Video URL',
 		name: 'url',
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['reframe'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'URL of the video to reframe',
 		routing: {
 			send: {
@@ -29,7 +64,13 @@ export const reframeDescription: INodeProperties[] = [
 		type: 'number',
 		required: true,
 		default: 1920,
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['reframe'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Target width in pixels',
 		routing: {
 			send: {
@@ -44,7 +85,13 @@ export const reframeDescription: INodeProperties[] = [
 		type: 'number',
 		required: true,
 		default: 1080,
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['reframe'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Target height in pixels',
 		routing: {
 			send: {
@@ -59,7 +106,13 @@ export const reframeDescription: INodeProperties[] = [
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['reframe'],
+				useJsonBody: [false],
+			},
+		},
 		options: [
 			{
 				displayName: 'Background Color',

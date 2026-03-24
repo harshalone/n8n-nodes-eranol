@@ -9,12 +9,47 @@ const displayOptions = {
 
 export const captionDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['caption'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'Video URL',
 		name: 'url',
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['caption'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'URL of the video to caption',
 		routing: {
 			send: {
@@ -29,7 +64,13 @@ export const captionDescription: INodeProperties[] = [
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['caption'],
+				useJsonBody: [false],
+			},
+		},
 		options: [
 			{
 				displayName: 'Font Color',
@@ -128,7 +169,6 @@ export const captionDescription: INodeProperties[] = [
 					},
 				},
 			},
-
 		],
 	},
 ];

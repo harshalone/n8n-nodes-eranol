@@ -9,12 +9,47 @@ const displayOptions = {
 
 export const composeVideoDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['composeVideo'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'Main Video URL',
 		name: 'mainVideoUrl',
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['composeVideo'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'URL of the main/base video',
 		routing: {
 			send: {
@@ -32,7 +67,13 @@ export const composeVideoDescription: INodeProperties[] = [
 		},
 		required: true,
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['compose'],
+				operation: ['composeVideo'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Video or image segments to overlay onto the main video at specific time ranges',
 		options: [
 			{

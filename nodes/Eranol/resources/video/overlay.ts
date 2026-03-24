@@ -9,12 +9,47 @@ const displayOptions = {
 
 export const overlayDescription: INodeProperties[] = [
 	{
+		displayName: 'Send as JSON',
+		name: 'useJsonBody',
+		type: 'boolean',
+		default: false,
+		displayOptions,
+		description: 'Whether to send the request body as raw JSON instead of using individual fields',
+		noDataExpression: true,
+	},
+	{
+		displayName: 'JSON Body',
+		name: 'jsonBody',
+		type: 'json',
+		default: '{}',
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['overlay'],
+				useJsonBody: [true],
+			},
+		},
+		description: 'The JSON body to send with the request',
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{JSON.parse($value)}}',
+			},
+		},
+	},
+	{
 		displayName: 'Video URL',
 		name: 'url',
 		type: 'string',
 		required: true,
 		default: '',
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['overlay'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'URL of the video to add overlays to',
 		routing: {
 			send: {
@@ -32,7 +67,13 @@ export const overlayDescription: INodeProperties[] = [
 		},
 		required: true,
 		default: {},
-		displayOptions,
+		displayOptions: {
+			show: {
+				resource: ['video'],
+				operation: ['overlay'],
+				useJsonBody: [false],
+			},
+		},
 		description: 'Overlays to add to the video',
 		options: [
 			{
@@ -119,7 +160,7 @@ export const overlayDescription: INodeProperties[] = [
 						default: 0,
 						description: 'Vertical position in pixels',
 					},
-			],
+				],
 			},
 		],
 		routing: {
