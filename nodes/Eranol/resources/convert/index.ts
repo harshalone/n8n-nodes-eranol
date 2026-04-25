@@ -39,7 +39,7 @@ export const convertDescription: INodeProperties[] = [
 			{
 				name: 'Image to WebP',
 				value: 'imageToWebp',
-				action: 'Convert image to WebP',
+				action: 'Convert image to web p',
 				description: 'Convert an image file to WebP format',
 			},
 			{
@@ -51,7 +51,7 @@ export const convertDescription: INodeProperties[] = [
 			{
 				name: 'Video to WebM',
 				value: 'videoToWebm',
-				action: 'Convert video to WebM',
+				action: 'Convert video to web m',
 				description: 'Convert a video file to WebM format (VP9 + Opus)',
 			},
 		],
