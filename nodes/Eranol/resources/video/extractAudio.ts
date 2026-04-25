@@ -30,12 +30,6 @@ export const extractAudioDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const extractAudioDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to extract audio from',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const extractAudioDescription: INodeProperties[] = [
 				type: 'boolean',
 				default: true,
 				description: 'Whether to extract audio as mono',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'mono',
-					},
-				},
 			},
 		],
 	},

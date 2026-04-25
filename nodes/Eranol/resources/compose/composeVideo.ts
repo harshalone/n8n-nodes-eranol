@@ -30,12 +30,6 @@ export const composeVideoDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Main Video URL',
@@ -51,12 +45,6 @@ export const composeVideoDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the main/base video',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'main_video_url',
-			},
-		},
 	},
 	{
 		displayName: 'Overlays',
@@ -118,12 +106,5 @@ export const composeVideoDescription: INodeProperties[] = [
 				],
 			},
 		],
-		routing: {
-			send: {
-				type: 'body',
-				property: 'overlays',
-				value: '={{$value.overlayValues}}',
-			},
-		},
 	},
 ];

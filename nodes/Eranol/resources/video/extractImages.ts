@@ -30,12 +30,6 @@ export const extractImagesDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const extractImagesDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to extract images from',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Start (Seconds)',
@@ -72,12 +60,6 @@ export const extractImagesDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Start time in seconds',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'start_sec',
-			},
-		},
 	},
 	{
 		displayName: 'End (Seconds)',
@@ -93,12 +75,6 @@ export const extractImagesDescription: INodeProperties[] = [
 			},
 		},
 		description: 'End time in seconds',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'end_sec',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -120,12 +96,6 @@ export const extractImagesDescription: INodeProperties[] = [
 				type: 'number',
 				default: 1,
 				description: 'Frames per second to extract',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'fps',
-					},
-				},
 			},
 		],
 	},

@@ -18,13 +18,6 @@ export const notifyDescription: INodeProperties[] = [
 				value: 'sendEmail',
 				action: 'Send email notification',
 				description: 'Send an HTML email notification',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/notifications/email',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 		],
 		default: 'sendEmail',

@@ -30,12 +30,6 @@ export const generateGifDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const generateGifDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to create GIF from',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Start (Seconds)',
@@ -72,12 +60,6 @@ export const generateGifDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Start time in seconds',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'start_sec',
-			},
-		},
 	},
 	{
 		displayName: 'End (Seconds)',
@@ -93,12 +75,6 @@ export const generateGifDescription: INodeProperties[] = [
 			},
 		},
 		description: 'End time in seconds (max 60s segment)',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'end_sec',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -120,12 +96,6 @@ export const generateGifDescription: INodeProperties[] = [
 				type: 'number',
 				default: 10,
 				description: 'Frames per second for the GIF',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'fps',
-					},
-				},
 			},
 			{
 				displayName: 'Width',
@@ -133,12 +103,6 @@ export const generateGifDescription: INodeProperties[] = [
 				type: 'number',
 				default: 320,
 				description: 'Width of the GIF in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'width',
-					},
-				},
 			},
 		],
 	},

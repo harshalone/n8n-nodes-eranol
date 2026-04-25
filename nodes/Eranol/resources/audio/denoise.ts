@@ -30,12 +30,6 @@ export const denoiseDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Audio URL',
@@ -51,12 +45,6 @@ export const denoiseDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the audio file to denoise',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -82,12 +70,6 @@ export const denoiseDescription: INodeProperties[] = [
 					{ name: 'RNN', value: 'rnn' },
 				],
 				description: 'Noise reduction method',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'method',
-					},
-				},
 			},
 			{
 				displayName: 'Noise Reduction (dB)',
@@ -95,12 +77,6 @@ export const denoiseDescription: INodeProperties[] = [
 				type: 'number',
 				default: 12,
 				description: 'Amount of noise reduction in decibels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'noise_reduction',
-					},
-				},
 			},
 		],
 	},

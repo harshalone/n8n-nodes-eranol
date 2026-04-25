@@ -30,12 +30,6 @@ export const sendEmailDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'To',
@@ -51,12 +45,6 @@ export const sendEmailDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Recipient email address',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'to',
-			},
-		},
 	},
 	{
 		displayName: 'Subject',
@@ -72,12 +60,6 @@ export const sendEmailDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Email subject line',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'subject',
-			},
-		},
 	},
 	{
 		displayName: 'Message',
@@ -95,12 +77,6 @@ export const sendEmailDescription: INodeProperties[] = [
 		description: 'HTML email body',
 		typeOptions: {
 			rows: 5,
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'message',
-			},
 		},
 	},
 ];

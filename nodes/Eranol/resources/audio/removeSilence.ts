@@ -30,12 +30,6 @@ export const removeSilenceDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Audio URL',
@@ -51,12 +45,6 @@ export const removeSilenceDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the audio file to process',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const removeSilenceDescription: INodeProperties[] = [
 				type: 'number',
 				default: -40,
 				description: 'Volume threshold below which audio is considered silence',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'silence_thresh_db',
-					},
-				},
 			},
 			{
 				displayName: 'Min Silence Duration',
@@ -92,12 +74,6 @@ export const removeSilenceDescription: INodeProperties[] = [
 				typeOptions: { numberPrecision: 2 },
 				default: 0.5,
 				description: 'Minimum duration of silence to remove (seconds)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'min_silence_duration',
-					},
-				},
 			},
 			{
 				displayName: 'Padding',
@@ -106,12 +82,6 @@ export const removeSilenceDescription: INodeProperties[] = [
 				typeOptions: { numberPrecision: 2 },
 				default: 0.1,
 				description: 'Padding to keep around non-silent segments (seconds)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'padding',
-					},
-				},
 			},
 		],
 	},

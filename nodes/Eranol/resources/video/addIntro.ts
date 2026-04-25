@@ -30,12 +30,6 @@ export const addIntroDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const addIntroDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the main video',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Intro URL',
@@ -72,11 +60,5 @@ export const addIntroDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the intro clip to prepend',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'intro_url',
-			},
-		},
 	},
 ];

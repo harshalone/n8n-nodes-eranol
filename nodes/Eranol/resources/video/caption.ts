@@ -30,12 +30,6 @@ export const captionDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const captionDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to caption',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const captionDescription: INodeProperties[] = [
 				type: 'color',
 				default: '#FFFFFF',
 				description: 'Color of the caption text (hex format)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'font_color',
-					},
-				},
 			},
 			{
 				displayName: 'Font Size',
@@ -92,12 +74,6 @@ export const captionDescription: INodeProperties[] = [
 				typeOptions: { minValue: 8, maxValue: 120 },
 				default: 24,
 				description: 'Font size for the captions (8-120)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'font_size',
-					},
-				},
 			},
 			{
 				displayName: 'Max Segment Duration',
@@ -105,12 +81,6 @@ export const captionDescription: INodeProperties[] = [
 				type: 'number',
 				default: 5,
 				description: 'Maximum duration of each caption segment in seconds',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'max_segment_duration',
-					},
-				},
 			},
 			{
 				displayName: 'Max Words Per Line',
@@ -118,12 +88,6 @@ export const captionDescription: INodeProperties[] = [
 				type: 'number',
 				default: 7,
 				description: 'Maximum number of words per caption line',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'max_words_per_line',
-					},
-				},
 			},
 			{
 				displayName: 'Outline Color',
@@ -131,12 +95,6 @@ export const captionDescription: INodeProperties[] = [
 				type: 'color',
 				default: '#000000',
 				description: 'Color of the text outline (hex format)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'outline_color',
-					},
-				},
 			},
 			{
 				displayName: 'Outline Width',
@@ -144,12 +102,6 @@ export const captionDescription: INodeProperties[] = [
 				type: 'number',
 				default: 2,
 				description: 'Width of the text outline',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'outline_width',
-					},
-				},
 			},
 			{
 				displayName: 'Position',
@@ -162,12 +114,6 @@ export const captionDescription: INodeProperties[] = [
 					{ name: 'Center', value: 'center' },
 				],
 				description: 'Position of the captions on the video',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'position',
-					},
-				},
 			},
 		],
 	},

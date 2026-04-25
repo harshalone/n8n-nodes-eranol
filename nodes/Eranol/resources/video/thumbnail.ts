@@ -30,12 +30,6 @@ export const thumbnailDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const thumbnailDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to create a thumbnail from',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'color',
 				default: '',
 				description: 'Background color behind text (hex format)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'bg_color',
-					},
-				},
 			},
 			{
 				displayName: 'Font Color',
@@ -91,12 +73,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'color',
 				default: '#FFFFFF',
 				description: 'Color of the text overlay (hex format)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'font_color',
-					},
-				},
 			},
 			{
 				displayName: 'Font Size',
@@ -104,12 +80,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'number',
 				default: 48,
 				description: 'Font size for the text overlay',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'font_size',
-					},
-				},
 			},
 			{
 				displayName: 'Height',
@@ -117,12 +87,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'number',
 				default: 720,
 				description: 'Height of the thumbnail in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'height',
-					},
-				},
 			},
 			{
 				displayName: 'Position',
@@ -135,12 +99,6 @@ export const thumbnailDescription: INodeProperties[] = [
 					{ name: 'Bottom', value: 'bottom' },
 				],
 				description: 'Position of the text overlay',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'position',
-					},
-				},
 			},
 			{
 				displayName: 'Text',
@@ -148,12 +106,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Text overlay to add to the thumbnail',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'text',
-					},
-				},
 			},
 			{
 				displayName: 'Time (Seconds)',
@@ -161,12 +113,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'number',
 				default: 0,
 				description: 'Time position to capture the frame',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'time_sec',
-					},
-				},
 			},
 			{
 				displayName: 'Width',
@@ -174,12 +120,6 @@ export const thumbnailDescription: INodeProperties[] = [
 				type: 'number',
 				default: 1280,
 				description: 'Width of the thumbnail in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'width',
-					},
-				},
 			},
 		],
 	},

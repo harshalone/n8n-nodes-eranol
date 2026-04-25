@@ -30,12 +30,6 @@ export const highlightsDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Audio URL',
@@ -51,12 +45,6 @@ export const highlightsDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the audio file to extract highlights from',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const highlightsDescription: INodeProperties[] = [
 				type: 'number',
 				default: 5,
 				description: 'Number of top highlights to extract',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'top_n',
-					},
-				},
 			},
 			{
 				displayName: 'Clip Duration',
@@ -91,12 +73,6 @@ export const highlightsDescription: INodeProperties[] = [
 				type: 'number',
 				default: 10,
 				description: 'Duration of each highlight clip in seconds',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'clip_duration',
-					},
-				},
 			},
 		],
 	},

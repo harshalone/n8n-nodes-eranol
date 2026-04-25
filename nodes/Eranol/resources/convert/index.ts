@@ -23,78 +23,36 @@ export const convertDescription: INodeProperties[] = [
 				value: 'audioToMp3',
 				action: 'Convert audio to MP3',
 				description: 'Convert an audio file to MP3 format',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/convert/audio/to/mp3',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Audio to WAV',
 				value: 'audioToWav',
 				action: 'Convert audio to WAV',
 				description: 'Convert an audio file to WAV format',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/convert/audio/to/wav',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Image to JPG',
 				value: 'imageToJpg',
 				action: 'Convert image to JPG',
 				description: 'Convert an image file to JPG format',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/convert/image/to/jpg',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Image to WebP',
 				value: 'imageToWebp',
-				action: 'Convert image to web p',
+				action: 'Convert image to WebP',
 				description: 'Convert an image file to WebP format',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/convert/image/to/webp',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Video to MP4',
 				value: 'videoToMp4',
 				action: 'Convert video to MP4',
 				description: 'Convert a video file to MP4 format',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/convert/video/to/mp4',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Video to WebM',
 				value: 'videoToWebm',
-				action: 'Convert video to web m',
+				action: 'Convert video to WebM',
 				description: 'Convert a video file to WebM format (VP9 + Opus)',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/convert/video/to/webm',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 		],
 		default: 'videoToMp4',

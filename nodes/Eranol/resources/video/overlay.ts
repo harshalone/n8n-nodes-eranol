@@ -30,12 +30,6 @@ export const overlayDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const overlayDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to add overlays to',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Overlays',
@@ -135,14 +123,8 @@ export const overlayDescription: INodeProperties[] = [
 						type: 'options',
 						default: 'text',
 						options: [
-							{
-								name: 'Text',
-								value: 'text',
-							},
-							{
-								name: 'Image',
-								value: 'image',
-							},
+							{ name: 'Text', value: 'text' },
+							{ name: 'Image', value: 'image' },
 						],
 						description: 'Type of overlay',
 					},
@@ -163,12 +145,5 @@ export const overlayDescription: INodeProperties[] = [
 				],
 			},
 		],
-		routing: {
-			send: {
-				type: 'body',
-				property: 'overlays',
-				value: '={{$value.overlayValues}}',
-			},
-		},
 	},
 ];

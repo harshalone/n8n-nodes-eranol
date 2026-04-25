@@ -30,12 +30,6 @@ export const trimDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const trimDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to trim',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Start (Seconds)',
@@ -72,12 +60,6 @@ export const trimDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Start time in seconds',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'start_sec',
-			},
-		},
 	},
 	{
 		displayName: 'End (Seconds)',
@@ -93,11 +75,5 @@ export const trimDescription: INodeProperties[] = [
 			},
 		},
 		description: 'End time in seconds',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'end_sec',
-			},
-		},
 	},
 ];

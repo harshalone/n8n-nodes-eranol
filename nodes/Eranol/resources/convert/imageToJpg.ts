@@ -28,12 +28,6 @@ export const imageToJpgDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'File URL',
@@ -49,11 +43,5 @@ export const imageToJpgDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the image file to convert to JPG',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 ];

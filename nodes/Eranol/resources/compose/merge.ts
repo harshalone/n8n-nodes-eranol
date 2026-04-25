@@ -30,12 +30,6 @@ export const mergeDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Images',
@@ -78,13 +72,6 @@ export const mergeDescription: INodeProperties[] = [
 				],
 			},
 		],
-		routing: {
-			send: {
-				type: 'body',
-				property: 'images',
-				value: '={{$value.imageValues}}',
-			},
-		},
 	},
 	{
 		displayName: 'Audio URL',
@@ -100,12 +87,6 @@ export const mergeDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the audio track',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'audio_url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -131,12 +112,6 @@ export const mergeDescription: INodeProperties[] = [
 					{ name: 'Loop', value: 'loop' },
 				],
 				description: 'How audio length is handled relative to video',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'audio_mode',
-					},
-				},
 			},
 			{
 				displayName: 'Background Audio URL',
@@ -144,12 +119,6 @@ export const mergeDescription: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'URL of a background audio track to mix in',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'bg_audio_url',
-					},
-				},
 			},
 			{
 				displayName: 'Background Audio Volume',
@@ -158,12 +127,6 @@ export const mergeDescription: INodeProperties[] = [
 				typeOptions: { minValue: 0, maxValue: 1, numberPrecision: 2 },
 				default: 0.3,
 				description: 'Volume level for the background audio (0-1)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'bg_audio_volume',
-					},
-				},
 			},
 			{
 				displayName: 'Fade Duration (Seconds)',
@@ -172,12 +135,6 @@ export const mergeDescription: INodeProperties[] = [
 				typeOptions: { numberPrecision: 1 },
 				default: 0.5,
 				description: 'Duration of the fade transition in seconds',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'fade_secs',
-					},
-				},
 			},
 			{
 				displayName: 'Fit',
@@ -190,12 +147,6 @@ export const mergeDescription: INodeProperties[] = [
 					{ name: 'Fill', value: 'fill' },
 				],
 				description: 'How images are fit to the output dimensions',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'fit',
-					},
-				},
 			},
 			{
 				displayName: 'FPS',
@@ -203,12 +154,6 @@ export const mergeDescription: INodeProperties[] = [
 				type: 'number',
 				default: 30,
 				description: 'Frames per second for the output video',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'fps',
-					},
-				},
 			},
 			{
 				displayName: 'Height',
@@ -216,12 +161,6 @@ export const mergeDescription: INodeProperties[] = [
 				type: 'number',
 				default: 1080,
 				description: 'Output video height in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'height',
-					},
-				},
 			},
 			{
 				displayName: 'Transition',
@@ -233,12 +172,6 @@ export const mergeDescription: INodeProperties[] = [
 					{ name: 'None', value: 'none' },
 				],
 				description: 'Transition effect between slides',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'transition',
-					},
-				},
 			},
 			{
 				displayName: 'Width',
@@ -246,12 +179,6 @@ export const mergeDescription: INodeProperties[] = [
 				type: 'number',
 				default: 1920,
 				description: 'Output video width in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'width',
-					},
-				},
 			},
 		],
 	},

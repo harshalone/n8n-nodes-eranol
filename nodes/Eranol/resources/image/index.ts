@@ -19,25 +19,12 @@ export const imageDescription: INodeProperties[] = [
 				value: 'generateImage',
 				action: 'Generate image with AI',
 				description: 'Generate an image using AI from a text prompt',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/image',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Get Image Status',
 				value: 'imageStatus',
 				action: 'Get image generation status',
 				description: 'Check the status of an image generation job',
-				routing: {
-					request: {
-						method: 'GET',
-						url: '=/image/status/{{$parameter.jobId}}',
-					},
-				},
 			},
 		],
 		default: 'generateImage',

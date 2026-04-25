@@ -28,12 +28,6 @@ export const videoToWebmDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'File URL',
@@ -49,11 +43,5 @@ export const videoToWebmDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video file to convert to WebM',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 ];

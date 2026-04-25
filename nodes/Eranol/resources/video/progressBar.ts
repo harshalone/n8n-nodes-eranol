@@ -30,12 +30,6 @@ export const progressBarDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const progressBarDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to add a progress bar to',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const progressBarDescription: INodeProperties[] = [
 				type: 'color',
 				default: '#FF0000',
 				description: 'Color of the progress bar (hex format)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'color',
-					},
-				},
 			},
 			{
 				displayName: 'Height',
@@ -91,12 +73,6 @@ export const progressBarDescription: INodeProperties[] = [
 				type: 'number',
 				default: 5,
 				description: 'Height of the progress bar in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'height',
-					},
-				},
 			},
 			{
 				displayName: 'Opacity',
@@ -105,12 +81,6 @@ export const progressBarDescription: INodeProperties[] = [
 				typeOptions: { minValue: 0, maxValue: 1, numberPrecision: 2 },
 				default: 1,
 				description: 'Opacity of the progress bar (0-1)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'opacity',
-					},
-				},
 			},
 			{
 				displayName: 'Position',
@@ -122,12 +92,6 @@ export const progressBarDescription: INodeProperties[] = [
 					{ name: 'Bottom', value: 'bottom' },
 				],
 				description: 'Position of the progress bar',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'position',
-					},
-				},
 			},
 			{
 				displayName: 'Style',
@@ -139,12 +103,6 @@ export const progressBarDescription: INodeProperties[] = [
 					{ name: 'Shrink', value: 'shrink' },
 				],
 				description: 'Progress bar animation style',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'style',
-					},
-				},
 			},
 		],
 	},

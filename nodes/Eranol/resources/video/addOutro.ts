@@ -30,12 +30,6 @@ export const addOutroDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const addOutroDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the main video',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Outro URL',
@@ -72,11 +60,5 @@ export const addOutroDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the outro clip to append',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'outro_url',
-			},
-		},
 	},
 ];

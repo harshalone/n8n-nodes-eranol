@@ -30,12 +30,6 @@ export const concatDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Clips',
@@ -78,12 +72,5 @@ export const concatDescription: INodeProperties[] = [
 				],
 			},
 		],
-		routing: {
-			send: {
-				type: 'body',
-				property: 'clips',
-				value: '={{$value.clipValues}}',
-			},
-		},
 	},
 ];

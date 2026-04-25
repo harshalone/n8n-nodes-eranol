@@ -30,12 +30,6 @@ export const reframeDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Video URL',
@@ -51,12 +45,6 @@ export const reframeDescription: INodeProperties[] = [
 			},
 		},
 		description: 'URL of the video to reframe',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'url',
-			},
-		},
 	},
 	{
 		displayName: 'Width',
@@ -72,12 +60,6 @@ export const reframeDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Target width in pixels',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'width',
-			},
-		},
 	},
 	{
 		displayName: 'Height',
@@ -93,12 +75,6 @@ export const reframeDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Target height in pixels',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'height',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -120,12 +96,6 @@ export const reframeDescription: INodeProperties[] = [
 				type: 'color',
 				default: '#000000',
 				description: 'Color for padding areas (hex format)',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'bg_color',
-					},
-				},
 			},
 		],
 	},

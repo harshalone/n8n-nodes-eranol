@@ -30,12 +30,6 @@ export const generateImageDescription: INodeProperties[] = [
 			},
 		},
 		description: 'The JSON body to send with the request',
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{JSON.parse($value)}}',
-			},
-		},
 	},
 	{
 		displayName: 'Prompt',
@@ -51,12 +45,6 @@ export const generateImageDescription: INodeProperties[] = [
 			},
 		},
 		description: 'Text prompt describing the image to generate',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'prompt',
-			},
-		},
 	},
 	{
 		displayName: 'Additional Fields',
@@ -78,12 +66,6 @@ export const generateImageDescription: INodeProperties[] = [
 				type: 'number',
 				default: 768,
 				description: 'Output image height in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'height',
-					},
-				},
 			},
 			{
 				displayName: 'Negative Prompt',
@@ -91,12 +73,6 @@ export const generateImageDescription: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Text describing what to exclude from the image',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'negative_prompt',
-					},
-				},
 			},
 			{
 				displayName: 'Seed',
@@ -104,12 +80,6 @@ export const generateImageDescription: INodeProperties[] = [
 				type: 'number',
 				default: 42,
 				description: 'Random seed for reproducibility',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'seed',
-					},
-				},
 			},
 			{
 				displayName: 'Width',
@@ -117,12 +87,6 @@ export const generateImageDescription: INodeProperties[] = [
 				type: 'number',
 				default: 512,
 				description: 'Output image width in pixels',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'width',
-					},
-				},
 			},
 		],
 	},

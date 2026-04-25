@@ -20,39 +20,18 @@ export const audioDescription: INodeProperties[] = [
 				value: 'denoise',
 				action: 'Denoise audio',
 				description: 'Remove background noise from audio',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/audio/denoise',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Highlights',
 				value: 'highlights',
 				action: 'Extract audio highlights',
 				description: 'Extract the loudest segments based on RMS energy',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/audio/highlights',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 			{
 				name: 'Remove Silence',
 				value: 'removeSilence',
 				action: 'Remove silence from audio',
 				description: 'Detect and eliminate quiet gaps in audio',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '/ffmpeg/audio/remove-silence',
-						headers: { 'Content-Type': 'application/json' },
-					},
-				},
 			},
 		],
 		default: 'denoise',
