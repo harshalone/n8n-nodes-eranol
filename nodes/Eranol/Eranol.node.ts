@@ -3,210 +3,91 @@ import {
 	NodeOperationError,
 	type IDataObject,
 	type IExecuteFunctions,
+	type IHttpRequestOptions,
 	type INodeExecutionData,
+	type INodeProperties,
 	type INodeType,
 	type INodeTypeDescription,
 } from 'n8n-workflow';
 
-import { videoDescription } from './resources/video';
-import { audioDescription } from './resources/audio';
-import { convertDescription } from './resources/convert';
-import { composeDescription } from './resources/compose';
-import { jobDescription } from './resources/job';
-import { imageDescription } from './resources/image';
-import { notifyDescription } from './resources/notify';
+import { OPERATIONS, OPERATION_BY_VALUE, OPERATION_OPTIONS } from './operations';
 
 const BASE_URL = 'https://eranol.com/api/v1';
 
-const OPERATION_MAP: Record<string, { method: string; url: string }> = {
-	// video
-	addIntro:      { method: 'POST', url: '/ffmpeg/video/add-intro' },
-	addOutro:      { method: 'POST', url: '/ffmpeg/video/add-outro' },
-	caption:       { method: 'POST', url: '/ffmpeg/video/caption' },
-	extractAudio:  { method: 'POST', url: '/ffmpeg/video/extract/audio' },
-	extractImages: { method: 'POST', url: '/ffmpeg/video/extract/images' },
-	generateGif:   { method: 'POST', url: '/ffmpeg/video/extract/gif' },
-	overlay:       { method: 'POST', url: '/ffmpeg/video/overlay' },
-	progressBar:   { method: 'POST', url: '/ffmpeg/video/progress-bar' },
-	reframe:       { method: 'POST', url: '/ffmpeg/video/reframe' },
-	thumbnail:     { method: 'POST', url: '/ffmpeg/video/thumbnail' },
-	trim:          { method: 'POST', url: '/ffmpeg/video/trim' },
-	watermark:     { method: 'POST', url: '/ffmpeg/video/watermark' },
-	// audio
-	denoise:       { method: 'POST', url: '/ffmpeg/audio/denoise' },
-	highlights:    { method: 'POST', url: '/ffmpeg/audio/highlights' },
-	removeSilence: { method: 'POST', url: '/ffmpeg/audio/remove-silence' },
-	// convert
-	audioToMp3:   { method: 'POST', url: '/ffmpeg/convert/audio/to/mp3' },
-	audioToWav:   { method: 'POST', url: '/ffmpeg/convert/audio/to/wav' },
-	imageToJpg:   { method: 'POST', url: '/ffmpeg/convert/image/to/jpg' },
-	imageToWebp:  { method: 'POST', url: '/ffmpeg/convert/image/to/webp' },
-	videoToMp4:   { method: 'POST', url: '/ffmpeg/convert/video/to/mp4' },
-	videoToWebm:  { method: 'POST', url: '/ffmpeg/convert/video/to/webm' },
-	// compose
-	concat:       { method: 'POST', url: '/ffmpeg/video/concat' },
-	composeVideo: { method: 'POST', url: '/ffmpeg/video/compose' },
-	merge:        { method: 'POST', url: '/ffmpeg/merge' },
-	// image
-	generateImage: { method: 'POST', url: '/image' },
-	// notify
-	sendEmail: { method: 'POST', url: '/notifications/email' },
-};
-
-function buildBody(operation: string, p: (name: string, fallback?: unknown) => unknown): Record<string, unknown> {
-	const additional = (p('additionalFields', {}) as Record<string, unknown>);
-
-	switch (operation) {
-		// ── video ──────────────────────────────────────────────────────────
-		case 'trim':
-			return { url: p('url'), start_sec: p('startSec'), end_sec: p('endSec') };
-		case 'addIntro':
-			return { url: p('url'), intro_url: p('introUrl') };
-		case 'addOutro':
-			return { url: p('url'), outro_url: p('outroUrl') };
-		case 'caption': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.fontColor !== undefined)          body.font_color = additional.fontColor;
-			if (additional.fontSize !== undefined)           body.font_size = additional.fontSize;
-			if (additional.maxSegmentDuration !== undefined) body.max_segment_duration = additional.maxSegmentDuration;
-			if (additional.maxWordsPerLine !== undefined)    body.max_words_per_line = additional.maxWordsPerLine;
-			if (additional.outlineColor !== undefined)       body.outline_color = additional.outlineColor;
-			if (additional.outlineWidth !== undefined)       body.outline_width = additional.outlineWidth;
-			if (additional.position !== undefined)           body.position = additional.position;
-			return body;
-		}
-		case 'extractAudio': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.mono !== undefined) body.mono = additional.mono;
-			return body;
-		}
-		case 'extractImages': {
-			const body: Record<string, unknown> = { url: p('url'), start_sec: p('startSec'), end_sec: p('endSec') };
-			if (additional.fps !== undefined) body.fps = additional.fps;
-			return body;
-		}
-		case 'generateGif': {
-			const body: Record<string, unknown> = { url: p('url'), start_sec: p('startSec'), end_sec: p('endSec') };
-			if (additional.fps !== undefined)   body.fps = additional.fps;
-			if (additional.width !== undefined) body.width = additional.width;
-			return body;
-		}
-		case 'overlay': {
-			const raw = p('overlays', { overlayValues: [] }) as { overlayValues: unknown[] };
-			return { url: p('url'), overlays: raw.overlayValues ?? [] };
-		}
-		case 'progressBar': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.color !== undefined)    body.color = additional.color;
-			if (additional.height !== undefined)   body.height = additional.height;
-			if (additional.opacity !== undefined)  body.opacity = additional.opacity;
-			if (additional.position !== undefined) body.position = additional.position;
-			if (additional.style !== undefined)    body.style = additional.style;
-			return body;
-		}
-		case 'reframe': {
-			const body: Record<string, unknown> = { url: p('url'), width: p('width'), height: p('height') };
-			if (additional.bgColor !== undefined) body.bg_color = additional.bgColor;
-			return body;
-		}
-		case 'thumbnail': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.bgColor !== undefined)   body.bg_color = additional.bgColor;
-			if (additional.fontColor !== undefined) body.font_color = additional.fontColor;
-			if (additional.fontSize !== undefined)  body.font_size = additional.fontSize;
-			if (additional.height !== undefined)    body.height = additional.height;
-			if (additional.position !== undefined)  body.position = additional.position;
-			if (additional.text !== undefined)      body.text = additional.text;
-			if (additional.timeSec !== undefined)   body.time_sec = additional.timeSec;
-			if (additional.width !== undefined)     body.width = additional.width;
-			return body;
-		}
-		case 'watermark': {
-			const body: Record<string, unknown> = { url: p('url'), watermark_url: p('watermarkUrl') };
-			if (additional.position !== undefined) body.position = additional.position;
-			if (additional.scale !== undefined)    body.scale = additional.scale;
-			if (additional.opacity !== undefined)  body.opacity = additional.opacity;
-			if (additional.margin !== undefined)   body.margin = additional.margin;
-			return body;
-		}
-		// ── audio ──────────────────────────────────────────────────────────
-		case 'denoise': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.method !== undefined)         body.method = additional.method;
-			if (additional.noiseReduction !== undefined) body.noise_reduction = additional.noiseReduction;
-			return body;
-		}
-		case 'highlights': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.topN !== undefined)        body.top_n = additional.topN;
-			if (additional.clipDuration !== undefined) body.clip_duration = additional.clipDuration;
-			return body;
-		}
-		case 'removeSilence': {
-			const body: Record<string, unknown> = { url: p('url') };
-			if (additional.silenceThreshDb !== undefined)    body.silence_thresh_db = additional.silenceThreshDb;
-			if (additional.minSilenceDuration !== undefined) body.min_silence_duration = additional.minSilenceDuration;
-			if (additional.padding !== undefined)            body.padding = additional.padding;
-			return body;
-		}
-		// ── convert ────────────────────────────────────────────────────────
-		case 'audioToMp3':
-		case 'audioToWav':
-		case 'imageToJpg':
-		case 'imageToWebp':
-		case 'videoToMp4':
-		case 'videoToWebm':
-			return { url: p('url') };
-		// ── compose ────────────────────────────────────────────────────────
-		case 'concat': {
-			const raw = p('clips', { clipValues: [] }) as { clipValues: unknown[] };
-			return { clips: raw.clipValues ?? [] };
-		}
-		case 'composeVideo': {
-			const raw = p('overlays', { overlayValues: [] }) as { overlayValues: unknown[] };
-			return { main_video_url: p('mainVideoUrl'), overlays: raw.overlayValues ?? [] };
-		}
-		case 'merge': {
-			const raw = p('images', { imageValues: [] }) as { imageValues: unknown[] };
-			const body: Record<string, unknown> = { images: raw.imageValues ?? [], audio_url: p('audioUrl') };
-			if (additional.audioMode !== undefined)       body.audio_mode = additional.audioMode;
-			if (additional.bgAudioUrl !== undefined)      body.bg_audio_url = additional.bgAudioUrl;
-			if (additional.bgAudioVolume !== undefined)   body.bg_audio_volume = additional.bgAudioVolume;
-			if (additional.fadeSecs !== undefined)        body.fade_secs = additional.fadeSecs;
-			if (additional.fit !== undefined)             body.fit = additional.fit;
-			if (additional.fps !== undefined)             body.fps = additional.fps;
-			if (additional.height !== undefined)          body.height = additional.height;
-			if (additional.transition !== undefined)      body.transition = additional.transition;
-			if (additional.width !== undefined)           body.width = additional.width;
-			return body;
-		}
-		// ── image ──────────────────────────────────────────────────────────
-		case 'generateImage': {
-			const body: Record<string, unknown> = { prompt: p('prompt') };
-			if (additional.height !== undefined)         body.height = additional.height;
-			if (additional.negativePrompt !== undefined) body.negative_prompt = additional.negativePrompt;
-			if (additional.seed !== undefined)           body.seed = additional.seed;
-			if (additional.width !== undefined)          body.width = additional.width;
-			return body;
-		}
-		// ── notify ─────────────────────────────────────────────────────────
-		case 'sendEmail':
-			return { to: p('to'), subject: p('subject'), message: p('message') };
-		default:
-			return {};
+/**
+ * Coerce an HTTP response into a JSON-safe object for n8n output.
+ *
+ * `httpRequest` normally returns the parsed body, but if the response is a full
+ * wrapper (status/headers/body with circular socket refs) we extract `body`,
+ * and otherwise fall back to a plain string/value wrapper. This prevents
+ * "Converting circular structure to JSON" errors.
+ */
+function toJsonSafe(data: unknown): IDataObject | IDataObject[] {
+	if (data === null || data === undefined) {
+		return { success: true };
 	}
+
+	if (typeof data === 'object') {
+		const obj = data as Record<string, unknown>;
+		// Full-response wrapper: surface just the body.
+		if ('body' in obj && ('headers' in obj || 'statusCode' in obj)) {
+			return toJsonSafe(obj.body);
+		}
+		try {
+			// Round-trip to drop any non-serialisable (circular) properties.
+			return JSON.parse(JSON.stringify(obj)) as IDataObject | IDataObject[];
+		} catch {
+			return { result: String(data) };
+		}
+	}
+
+	return { result: data as string | number | boolean };
 }
+
+/**
+ * Universal body UI. For each operation, shown only when that operation is
+ * selected: a slim notice linking to the operation's documentation page (n8n
+ * auto-links the bare URL), then an empty "Body (JSON)" editor. The docs page
+ * lists the exact payload fields and examples to paste in.
+ */
+const universalBodyFields: INodeProperties[] = OPERATIONS.flatMap((op) => [
+	{
+		displayName: `See the <a href="${op.docs}" target="_blank">${op.name} payload reference</a>.`,
+		name: `docs_${op.value}`,
+		type: 'notice',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['universal'],
+				eranolAction: [op.value],
+			},
+		},
+	},
+	{
+		displayName: 'Body (JSON)',
+		name: `body_${op.value}`,
+		type: 'json',
+		default: '{}',
+		description: 'Request body sent to the Eranol API. See the payload reference link above.',
+		displayOptions: {
+			show: {
+				resource: ['universal'],
+				eranolAction: [op.value],
+			},
+		},
+	},
+]);
 
 export class Eranol implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Eranol',
 		name: 'eranol',
 		icon: 'file:eranol.svg',
-
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: 'Interact with the Eranol FFmpeg media processing API',
+		subtitle:
+			'={{ $parameter["resource"] === "job" ? $parameter["operation"] : $parameter["eranolAction"] }}',
+		description: 'Interact with the Eranol media processing API',
 		defaults: {
 			name: 'Eranol',
 		},
@@ -226,128 +107,219 @@ export class Eranol implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Audio',
-						value: 'audio',
-					},
-					{
-						name: 'Compose',
-						value: 'compose',
-					},
-					{
-						name: 'Convert',
-						value: 'convert',
-					},
-					{
-						name: 'Image',
-						value: 'image',
+						name: 'Universal',
+						value: 'universal',
+						description: 'Run any Eranol API operation with a JSON body',
 					},
 					{
 						name: 'Job',
 						value: 'job',
-					},
-					{
-						name: 'Notify',
-						value: 'notify',
-					},
-					{
-						name: 'Video',
-						value: 'video',
+						description: 'Check job status, fetch results, or verify your API key',
 					},
 				],
-				default: 'video',
+				default: 'universal',
 			},
-			...videoDescription,
-			...audioDescription,
-			...convertDescription,
-			...composeDescription,
-			...imageDescription,
-			...notifyDescription,
-			...jobDescription,
+			// ── Universal ──────────────────────────────────────────────────────
+			// A single-option "operation" so n8n renders exactly ONE "Universal"
+			// tile in the nodes panel (n8n generates one tile per option of the
+			// parameter literally named "operation"). It is hidden inside the node
+			// so users only see the real "Operation" picker (eranolAction) below.
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'hidden',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'Universal',
+						value: 'universal',
+						action: 'Universal',
+						description: 'Run any Eranol API operation with a JSON body',
+					},
+				],
+				default: 'universal',
+				displayOptions: {
+					show: {
+						resource: ['universal'],
+					},
+				},
+			},
+			// The actual operation picker shown inside the Universal node.
+			{
+				displayName: 'Operation',
+				name: 'eranolAction',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['universal'],
+					},
+				},
+				options: OPERATION_OPTIONS,
+				default: 'trim',
+			},
+			...universalBodyFields,
+			// ── Job ────────────────────────────────────────────────────────────
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['job'],
+					},
+				},
+				options: [
+					{
+						name: 'Get Status',
+						value: 'getStatus',
+						action: 'Get job status',
+						description: 'Retrieve current job status, progress, and completion data',
+					},
+					{
+						name: 'Get Result',
+						value: 'getResult',
+						action: 'Get job result',
+						description: 'Get the result of a completed job',
+					},
+					{
+						name: 'Delete',
+						value: 'deleteJob',
+						action: 'Delete a job',
+						description: 'Remove a job and its associated output file',
+					},
+				],
+				default: 'getStatus',
+			},
+			{
+				displayName: 'Job ID',
+				name: 'jobId',
+				type: 'string',
+				default: '',
+				required: true,
+				description: 'The ID of the job to act on',
+				displayOptions: {
+					show: {
+						resource: ['job'],
+					},
+				},
+			},
 		],
 		usableAsTool: true,
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		const request = this.helpers.httpRequestWithAuthentication.bind(this as never);
+		const credentials = await this.getCredentials('eranolApi');
+		const apiKey = credentials.apiKey as string;
+		const authHeaders = { 'x-api-key': apiKey };
+		const httpRequest = this.helpers.httpRequest.bind(this);
+		const node = this.getNode();
+
+		// Wrap httpRequest so a failed request surfaces the API's status and body
+		// as a clean message instead of a circular response object.
+		const request = async (options: IHttpRequestOptions): Promise<unknown> => {
+			try {
+				return await httpRequest(options);
+			} catch (error) {
+				const err = error as {
+					statusCode?: number;
+					response?: { statusCode?: number; body?: unknown };
+					message?: string;
+				};
+				const status = err.statusCode ?? err.response?.statusCode;
+				const bodyText =
+					typeof err.response?.body === 'string'
+						? err.response.body
+						: JSON.stringify(err.response?.body ?? '');
+				const detail = bodyText && bodyText !== '""' ? ` — ${bodyText}` : '';
+				throw new NodeOperationError(
+					node,
+					`Eranol API request failed${status ? ` (HTTP ${status})` : ''}${detail || `: ${err.message ?? 'Unknown error'}`}`,
+				);
+			}
+		};
+
 		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = [];
 
 		for (let i = 0; i < items.length; i++) {
 			const resource = this.getNodeParameter('resource', i) as string;
-			const operation = this.getNodeParameter('operation', i) as string;
-			const useJsonBody = this.getNodeParameter('useJsonBody', i, false) as boolean;
-
-			const p = (name: string, fallback?: unknown) => {
-				try {
-					return this.getNodeParameter(name, i);
-				} catch {
-					return fallback;
-				}
-			};
 
 			let responseData: unknown;
 
-			// ── GET/DELETE operations (no body) ────────────────────────────
 			if (resource === 'job') {
-				const jobId = operation !== 'verify' ? (p('jobId') as string) : '';
+				const operation = this.getNodeParameter('operation', i) as string;
+				const jobId = this.getNodeParameter('jobId', i) as string;
 
 				if (operation === 'getStatus') {
-					responseData = await request('eranolApi', {
+					responseData = await request({
 						method: 'GET',
 						url: `${BASE_URL}/ffmpeg/status/${jobId}`,
-						headers: { Accept: 'application/json' },
+						headers: { Accept: 'application/json', ...authHeaders },
+						json: true,
 					});
 				} else if (operation === 'getResult') {
-					responseData = await request('eranolApi', {
+					responseData = await request({
 						method: 'GET',
 						url: `${BASE_URL}/ffmpeg/result/${jobId}`,
-						headers: { Accept: 'application/json' },
+						headers: { Accept: 'application/json', ...authHeaders },
+						json: true,
 					});
 				} else if (operation === 'deleteJob') {
-					responseData = await request('eranolApi', {
+					responseData = await request({
 						method: 'DELETE',
 						url: `${BASE_URL}/ffmpeg/jobs/${jobId}`,
-						headers: { Accept: 'application/json' },
+						headers: { Accept: 'application/json', ...authHeaders },
+						json: true,
 					});
-				} else if (operation === 'verify') {
-					responseData = await request('eranolApi', {
-						method: 'GET',
-						url: `${BASE_URL}/verify`,
-						headers: { Accept: 'application/json' },
-					});
+				} else {
+					throw new NodeOperationError(this.getNode(), `Unknown job operation: ${operation}`);
 				}
-			} else if (resource === 'image' && operation === 'imageStatus') {
-				const jobId = p('jobId') as string;
-				responseData = await request('eranolApi', {
-					method: 'GET',
-					url: `${BASE_URL}/image/status/${jobId}`,
-					headers: { Accept: 'application/json' },
-				});
 			} else {
-				// ── POST operations ────────────────────────────────────────
-				const route = OPERATION_MAP[operation];
+				// ── Universal: POST with a user-supplied JSON body ───────────────
+				const eranolAction = this.getNodeParameter('eranolAction', i) as string;
+				const route = OPERATION_BY_VALUE[eranolAction];
 				if (!route) {
-					throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
+					throw new NodeOperationError(this.getNode(), `Unknown operation: ${eranolAction}`);
 				}
 
-				const body = useJsonBody
-					? JSON.parse(p('jsonBody', '{}') as string)
-					: buildBody(operation, p);
+				const rawBody = this.getNodeParameter(`body_${eranolAction}`, i, '{}');
+				let body: IDataObject;
+				if (typeof rawBody === 'string') {
+					try {
+						body = JSON.parse(rawBody || '{}') as IDataObject;
+					} catch (error) {
+						throw new NodeOperationError(
+							this.getNode(),
+							`Body is not valid JSON: ${(error as Error).message}`,
+							{ itemIndex: i },
+						);
+					}
+				} else {
+					body = rawBody as IDataObject;
+				}
 
-				responseData = await request('eranolApi', {
-					method: route.method as 'POST',
+				responseData = await request({
+					method: route.method,
 					url: `${BASE_URL}${route.url}`,
 					headers: {
 						Accept: 'application/json',
 						'Content-Type': 'application/json',
+						...authHeaders,
 					},
 					body,
 					json: true,
 				});
 			}
 
+			// Normalise to a JSON-safe value. httpRequest can hand back a full
+			// response wrapper (with circular socket refs) when the body is not
+			// JSON; strip it down to the parsed body or a plain wrapper.
+			const safeData = toJsonSafe(responseData);
+
 			const executionData = this.helpers.constructExecutionMetaData(
-				this.helpers.returnJsonArray(responseData as IDataObject | IDataObject[]),
+				this.helpers.returnJsonArray(safeData),
 				{ itemData: { item: i } },
 			);
 			returnData.push(...executionData);
