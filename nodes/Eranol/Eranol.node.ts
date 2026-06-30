@@ -1,4 +1,5 @@
 import {
+	NodeApiError,
 	NodeConnectionTypes,
 	NodeOperationError,
 	type IDataObject,
@@ -8,6 +9,7 @@ import {
 	type INodeProperties,
 	type INodeType,
 	type INodeTypeDescription,
+	type JsonObject,
 } from 'n8n-workflow';
 
 import { OPERATIONS, OPERATION_BY_VALUE, OPERATION_OPTIONS } from './operations';
@@ -216,27 +218,14 @@ export class Eranol implements INodeType {
 		const httpRequest = this.helpers.httpRequest.bind(this);
 		const node = this.getNode();
 
-		// Wrap httpRequest so a failed request surfaces the API's status and body
-		// as a clean message instead of a circular response object.
+		// Wrap httpRequest so a failed HTTP request surfaces the API's status and
+		// response body through n8n's NodeApiError, which the UI renders with the
+		// full HTTP context instead of a circular response object.
 		const request = async (options: IHttpRequestOptions): Promise<unknown> => {
 			try {
 				return await httpRequest(options);
 			} catch (error) {
-				const err = error as {
-					statusCode?: number;
-					response?: { statusCode?: number; body?: unknown };
-					message?: string;
-				};
-				const status = err.statusCode ?? err.response?.statusCode;
-				const bodyText =
-					typeof err.response?.body === 'string'
-						? err.response.body
-						: JSON.stringify(err.response?.body ?? '');
-				const detail = bodyText && bodyText !== '""' ? ` — ${bodyText}` : '';
-				throw new NodeOperationError(
-					node,
-					`Eranol API request failed${status ? ` (HTTP ${status})` : ''}${detail || `: ${err.message ?? 'Unknown error'}`}`,
-				);
+				throw new NodeApiError(node, error as JsonObject);
 			}
 		};
 
