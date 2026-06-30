@@ -45,3 +45,9 @@ jobs:
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # @n8n/node-cli's prepublishOnly hook (n8n-node prerelease) aborts a
+          # plain `npm publish` unless RELEASE_MODE is set. We deliberately
+          # bypass its interactive `n8n-node release` (release-it) flow because
+          # that has no npm provenance support; we publish directly so the
+          # build is signed via OIDC.
+          RELEASE_MODE: 'true'
