@@ -251,6 +251,27 @@ export const OPERATIONS: EranolOperation[] = [
 		],
 	},
 	{
+		name: 'Zoom',
+		value: 'zoom',
+		description: 'Apply zoom effects to specific time segments in a video',
+		method: 'POST',
+		url: '/ffmpeg/video/zoom',
+		docs: `${DOCS}/ffmpeg-api-for-zoom`,
+		examples: [
+			{
+				label: 'Basic',
+				body: {
+					url: 'https://cdn.example.com/talking-head.mp4',
+					segments: [
+						{ start_sec: 5, duration_sec: 6 },
+						{ start_sec: 22, duration_sec: 4 },
+					],
+					zoom_level: 1.3,
+				},
+			},
+		],
+	},
+	{
 		name: 'Trim',
 		value: 'trim',
 		description: 'Cut a video to a start/end range',
@@ -291,6 +312,24 @@ export const OPERATIONS: EranolOperation[] = [
 	},
 	// ── Audio ────────────────────────────────────────────────────────────────
 	{
+		name: 'Add Background Music',
+		value: 'addBackgroundMusic',
+		description: 'Add background music to a video',
+		method: 'POST',
+		url: '/ffmpeg/video/add-bg-audio',
+		docs: `${DOCS}/ffmpeg-api-for-background-audio`,
+		examples: [
+			{
+				label: 'Basic',
+				body: {
+					video_url: 'https://cdn.example.com/video.mp4',
+					bg_audio_url: 'https://cdn.example.com/music.mp3',
+					bg_audio_volume: 0.2,
+				},
+			},
+		],
+	},
+	{
 		name: 'Denoise',
 		value: 'denoise',
 		description: 'Remove background noise from audio',
@@ -311,6 +350,32 @@ export const OPERATIONS: EranolOperation[] = [
 				body: {
 					url: 'https://cdn.example.com/noisy-audio.mp4',
 					method: 'arnndn',
+				},
+			},
+		],
+	},
+	{
+		name: 'Enhance Voice',
+		value: 'enhanceVoice',
+		description: 'Studio-quality voice enhancement with ML-based noise reduction',
+		method: 'POST',
+		url: '/ffmpeg/audio/enhance',
+		docs: `${DOCS}/enhance-audio`,
+		examples: [
+			{
+				label: 'Basic',
+				body: { url: 'https://cdn.example.com/raw.mp4' },
+			},
+			{
+				label: 'Full options',
+				body: {
+					url: 'https://cdn.example.com/raw.mp4',
+					voice_profile: 'bright',
+					loudness_target: -16,
+					post_filter: true,
+					atten_limit_db: 100,
+					keep_video: true,
+					output_format: 'mp3',
 				},
 			},
 		],
@@ -538,6 +603,29 @@ export const OPERATIONS: EranolOperation[] = [
 			{
 				label: 'Basic',
 				body: { prompt: 'A serene mountain lake at sunrise' },
+			},
+		],
+	},
+	// ── Social ───────────────────────────────────────────────────────────────
+	{
+		name: 'Publish to TikTok',
+		value: 'publishTiktok',
+		description: 'Post a video to TikTok via the Content Posting API',
+		method: 'POST',
+		url: '/social/tiktok/publish',
+		docs: `${DOCS}/ffmpeg-api-for-tiktok`,
+		examples: [
+			{
+				label: 'Basic',
+				body: {
+					title: 'Check this out! #fyp',
+					video_url: 'https://your-r2-or-cdn-url/video.mp4',
+					privacy_level: 'PUBLIC_TO_EVERYONE',
+					disable_duet: false,
+					disable_stitch: false,
+					disable_comment: false,
+					scheduled_publish_time: null,
+				},
 			},
 		],
 	},
