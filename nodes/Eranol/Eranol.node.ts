@@ -13,6 +13,13 @@ import {
 } from 'n8n-workflow';
 
 import { OPERATIONS, OPERATION_BY_VALUE, OPERATION_OPTIONS } from './operations';
+import {
+	buildPublishBody,
+	getSocialRoute,
+	socialFields,
+	type SocialOperation,
+	type SocialPlatform,
+} from './social';
 
 const BASE_URL = 'https://eranol.com/api/v1';
 
@@ -88,7 +95,7 @@ export class Eranol implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle:
-			'={{ $parameter["resource"] === "job" ? $parameter["operation"] : $parameter["eranolAction"] }}',
+			'={{ $parameter["resource"] === "job" ? $parameter["operation"] : $parameter["resource"] === "social" ? $parameter["platform"] + ": " + $parameter["socialOperation"] : $parameter["eranolAction"] }}',
 		description: 'Interact with the Eranol media processing API',
 		defaults: {
 			name: 'Eranol',
@@ -112,6 +119,11 @@ export class Eranol implements INodeType {
 						name: 'Universal',
 						value: 'universal',
 						description: 'Run any Eranol API operation with a JSON body',
+					},
+					{
+						name: 'Social',
+						value: 'social',
+						description: 'Publish and manage scheduled posts on Instagram, TikTok, YouTube, and X',
 					},
 					{
 						name: 'Job',
@@ -161,6 +173,32 @@ export class Eranol implements INodeType {
 				default: 'trim',
 			},
 			...universalBodyFields,
+			// ── Social ─────────────────────────────────────────────────────────
+			// Same hidden-"operation" trick as Universal: n8n renders one tile per
+			// option of a parameter literally named "operation", so it is hidden
+			// here and the real picker (socialOperation, defined in social.ts) is
+			// what users see.
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'hidden',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'Social',
+						value: 'social',
+						action: 'Social',
+						description: 'Publish and manage scheduled posts on Instagram, TikTok, YouTube, and X',
+					},
+				],
+				default: 'social',
+				displayOptions: {
+					show: {
+						resource: ['social'],
+					},
+				},
+			},
+			...socialFields,
 			// ── Job ────────────────────────────────────────────────────────────
 			{
 				displayName: 'Operation',
@@ -265,6 +303,57 @@ export class Eranol implements INodeType {
 				} else {
 					throw new NodeOperationError(this.getNode(), `Unknown job operation: ${operation}`);
 				}
+			} else if (resource === 'social') {
+				// ── Social: structured per-platform publish/list/cancel/status ───
+				const platform = this.getNodeParameter('platform', i) as SocialPlatform;
+				const socialOperation = this.getNodeParameter('socialOperation', i) as SocialOperation;
+
+				const scheduledPostId =
+					socialOperation === 'cancelScheduled'
+						? (this.getNodeParameter('scheduledPostId', i) as string)
+						: undefined;
+				const route = getSocialRoute(platform, socialOperation, scheduledPostId);
+
+				let body: IDataObject | undefined;
+				let qs: IDataObject | undefined;
+				if (socialOperation === 'publish') {
+					const rawParams: IDataObject = {
+						mediaUrl: this.getNodeParameter('mediaUrl', i, '') as string,
+						mediaType: this.getNodeParameter('mediaType', i, '') as string,
+						caption: this.getNodeParameter('caption', i, '') as string,
+						shareToFeed: this.getNodeParameter('shareToFeed', i, true) as boolean,
+						videoUrl: this.getNodeParameter('videoUrl', i, '') as string,
+						title: this.getNodeParameter('title', i, '') as string,
+						privacyLevel: this.getNodeParameter('privacyLevel', i, '') as string,
+						disableDuet: this.getNodeParameter('disableDuet', i, false) as boolean,
+						disableStitch: this.getNodeParameter('disableStitch', i, false) as boolean,
+						disableComment: this.getNodeParameter('disableComment', i, false) as boolean,
+						privacyStatus: this.getNodeParameter('privacyStatus', i, '') as string,
+						description: this.getNodeParameter('description', i, '') as string,
+						tags: this.getNodeParameter('tags', i, '') as string,
+						categoryId: this.getNodeParameter('categoryId', i, '') as string,
+						madeForKids: this.getNodeParameter('madeForKids', i, false) as boolean,
+						text: this.getNodeParameter('text', i, '') as string,
+						mediaUrls: this.getNodeParameter('mediaUrls', i, '') as string,
+						scheduledFor: this.getNodeParameter('scheduledFor', i, '') as string,
+					};
+					body = buildPublishBody(platform, rawParams);
+				} else if (socialOperation === 'getStatus') {
+					qs = { publish_id: this.getNodeParameter('publishId', i) as string };
+				}
+
+				responseData = await request({
+					method: route.method,
+					url: `${BASE_URL}${route.url}`,
+					headers: {
+						Accept: 'application/json',
+						...(body ? { 'Content-Type': 'application/json' } : {}),
+						...authHeaders,
+					},
+					...(body ? { body } : {}),
+					...(qs ? { qs } : {}),
+					json: true,
+				});
 			} else {
 				// ── Universal: POST with a user-supplied JSON body ───────────────
 				const eranolAction = this.getNodeParameter('eranolAction', i) as string;

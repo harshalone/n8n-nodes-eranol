@@ -55,6 +55,13 @@ You'll need an API Key from your [Eranol Dashboard](https://www.eranol.com/dashb
 - **Audio**: MP3, WAV.
 - **Image**: JPG, WebP.
 
+### Social
+Publish and manage scheduled posts on **Instagram**, **TikTok**, **YouTube**, and **X**, with structured, per-platform fields for each operation:
+- **Publish**: Post immediately, or set a future timestamp to schedule.
+- **List Scheduled**: View all scheduled posts for the platform, across every status.
+- **Cancel Scheduled**: Cancel a pending scheduled post and refund its credits.
+- **Get Status** (TikTok only): Poll the status of a TikTok publish by publish ID.
+
 ## License
 
 [MIT](LICENSE)
