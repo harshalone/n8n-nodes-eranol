@@ -263,7 +263,20 @@ export class Eranol implements INodeType {
 			try {
 				return await httpRequest(options);
 			} catch (error) {
-				throw new NodeApiError(node, error as JsonObject);
+				// TEMPORARY DIAGNOSTIC: NodeApiError silently replaces the real
+				// error with a generic per-status-code string (see n8n-workflow's
+				// STATUS_CODE_MESSAGES — 405 always becomes "Method not allowed -
+				// please check you are using the right HTTP method" regardless of
+				// what the backend actually said). Pass an explicit `message` so
+				// the real request + response detail survives to the node's error
+				// panel. Remove once the 405 root cause is confirmed.
+				const axiosLike = error as {
+					response?: { data?: unknown; status?: number };
+					message?: string;
+				};
+				throw new NodeApiError(node, error as JsonObject, {
+					message: `[DEBUG] sent ${options.method} ${options.url} | status=${axiosLike.response?.status} | body=${JSON.stringify(axiosLike.response?.data)} | raw=${axiosLike.message ?? ''}`,
+				});
 			}
 		};
 
