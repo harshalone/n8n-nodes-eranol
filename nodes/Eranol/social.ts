@@ -412,8 +412,10 @@ export function getSocialRoute(
 	if (operation === 'listScheduled') {
 		return { method: 'GET', url: `/social/${platform}/scheduled-posts` };
 	}
-	// cancelScheduled
-	return { method: 'DELETE', url: `/social/${platform}/scheduled-posts/${idParam}` };
+	if (operation === 'cancelScheduled') {
+		return { method: 'DELETE', url: `/social/${platform}/scheduled-posts/${idParam}` };
+	}
+	throw new Error(`Unknown social operation: ${operation}`);
 }
 
 /** Build the publish request body for a platform from its resolved node parameters. */

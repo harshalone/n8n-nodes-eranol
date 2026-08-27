@@ -306,7 +306,16 @@ export class Eranol implements INodeType {
 			} else if (resource === 'social') {
 				// ── Social: structured per-platform publish/list/cancel/status ───
 				const platform = this.getNodeParameter('platform', i) as SocialPlatform;
-				const socialOperation = this.getNodeParameter('socialOperation', i) as SocialOperation;
+				// Falls back to 'publish' (the field's own schema default) because n8n
+				// does not always persist a parameter into the saved workflow JSON when
+				// the selected value already equals its default — so older/untouched
+				// node instances can have no "socialOperation" key at all, and
+				// getNodeParameter then returns undefined instead of the default.
+				const socialOperation = this.getNodeParameter(
+					'socialOperation',
+					i,
+					'publish',
+				) as SocialOperation;
 
 				const scheduledPostId =
 					socialOperation === 'cancelScheduled'
