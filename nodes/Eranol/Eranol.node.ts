@@ -350,6 +350,7 @@ export class Eranol implements INodeType {
 						disableDuet: this.getNodeParameter('disableDuet', i, false) as boolean,
 						disableStitch: this.getNodeParameter('disableStitch', i, false) as boolean,
 						disableComment: this.getNodeParameter('disableComment', i, false) as boolean,
+						asDraft: this.getNodeParameter('asDraft', i, false) as boolean,
 						privacyStatus: this.getNodeParameter('privacyStatus', i, '') as string,
 						description: this.getNodeParameter('description', i, '') as string,
 						tags: this.getNodeParameter('tags', i, '') as string,

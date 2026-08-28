@@ -271,6 +271,15 @@ const tiktokFields: INodeProperties[] = [
 		default: false,
 		displayOptions: show('tiktok', 'publish'),
 	},
+	{
+		displayName: 'Save as Draft',
+		name: 'asDraft',
+		type: 'boolean',
+		default: false,
+		description:
+			'Whether to send the video to the creator\'s TikTok inbox as a draft instead of publishing it directly',
+		displayOptions: show('tiktok', 'publish'),
+	},
 	scheduleField('tiktok'),
 	{
 		displayName: 'Publish ID',
@@ -450,6 +459,7 @@ export function buildPublishBody(
 			disable_duet: params.disableDuet,
 			disable_stitch: params.disableStitch,
 			disable_comment: params.disableComment,
+			as_draft: params.asDraft,
 			...tiktokScheduling,
 		};
 	}
