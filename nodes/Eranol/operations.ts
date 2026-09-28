@@ -504,6 +504,37 @@ export const OPERATIONS: EranolOperation[] = [
 	},
 	// ── Compose ──────────────────────────────────────────────────────────────
 	{
+		name: 'Cut',
+		value: 'cut',
+		description: 'Cut a video into segments and concatenate them into one output',
+		method: 'POST',
+		url: '/ffmpeg/video/cut',
+		docs: `${DOCS}/ffmpeg-api-for-cut`,
+		examples: [
+			{
+				label: 'Remove a mid-roll mistake',
+				body: {
+					url: 'https://cdn.example.com/podcast-raw.mp4',
+					segments: [
+						{ start_sec: 0, end_sec: 120 },
+						{ start_sec: 145, end_sec: 600 },
+					],
+				},
+			},
+			{
+				label: 'Build a highlight reel',
+				body: {
+					url: 'https://cdn.example.com/stream-vod.mp4',
+					segments: [
+						{ start_sec: 320, end_sec: 335 },
+						{ start_sec: 1024, end_sec: 1041 },
+						{ start_sec: 2200, end_sec: 2210 },
+					],
+				},
+			},
+		],
+	},
+	{
 		name: 'Concat',
 		value: 'concat',
 		description: 'Concatenate multiple clips into one video',
