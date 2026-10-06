@@ -54,13 +54,19 @@ You'll need an API Key from your [Eranol Dashboard](https://www.eranol.com/dashb
 - **Video**: MP4, WebM.
 - **Audio**: MP3, WAV.
 - **Image**: JPG, WebP.
+- **Images to PDF**: Combine up to 50 images into one PDF, one image per page.
 
 ### Social
-Publish and manage scheduled posts on **Instagram**, **TikTok**, **YouTube**, and **X**, with structured, per-platform fields for each operation:
+Publish and manage scheduled posts on **Instagram**, **LinkedIn**, **TikTok**, **YouTube**, and **X**, with structured, per-platform fields for each operation:
 - **Publish**: Post immediately, or set a future timestamp to schedule.
 - **List Scheduled**: View all scheduled posts for the platform, across every status.
 - **Cancel Scheduled**: Cancel a pending scheduled post and refund its credits.
-- **Get Status** (TikTok only): Poll the status of a TikTok publish by publish ID.
+- **Get Status** (TikTok and LinkedIn): Poll the status of a publish by publish ID (TikTok) or log ID (LinkedIn).
+
+LinkedIn posts support text, article links, up to 9 images, one video, or one PDF document.
+
+### Media
+- **Upload Image**: Upload a binary image (jpg, png, gif, webp, max 20 MB) to your Eranol Media Library and get back a public URL, usable as `Media URLs` in LinkedIn posts. Costs 1 credit per upload.
 
 ## License
 

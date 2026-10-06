@@ -475,6 +475,32 @@ export const OPERATIONS: EranolOperation[] = [
 		],
 	},
 	{
+		name: 'Images to PDF',
+		value: 'imagesToPdf',
+		description: 'Combine multiple images into a single PDF, one image per page',
+		method: 'POST',
+		url: '/ffmpeg/convert/images/to/pdf',
+		docs: `${DOCS}/ffmpeg-api-for-images-to-pdf`,
+		examples: [
+			{
+				label: 'A4 pages',
+				body: {
+					urls: [
+						'https://cdn.example.com/page1.jpg',
+						'https://cdn.example.com/page2.png',
+					],
+					page_size: 'a4',
+				},
+			},
+			{
+				label: 'Original size',
+				body: {
+					urls: ['https://cdn.example.com/artwork-1.png', 'https://cdn.example.com/artwork-2.jpg'],
+				},
+			},
+		],
+	},
+	{
 		name: 'Convert Video to MP4',
 		value: 'videoToMp4',
 		description: 'Convert a video to MP4',

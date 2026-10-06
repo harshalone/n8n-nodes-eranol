@@ -3,13 +3,13 @@ import type { IDataObject, INodeProperties } from 'n8n-workflow';
 /**
  * Field and routing definitions for the "Social" resource: structured,
  * platform-specific UIs for publishing to and managing scheduled posts on
- * Instagram, TikTok, YouTube, and X — instead of the raw JSON body used by
+ * Instagram, LinkedIn, TikTok, YouTube, and X — instead of the raw JSON body used by
  * the Universal resource.
  *
  * Source: https://www.eranol.com/documentation (per-endpoint pages).
  */
 
-export type SocialPlatform = 'instagram' | 'tiktok' | 'youtube' | 'x';
+export type SocialPlatform = 'instagram' | 'linkedin' | 'tiktok' | 'youtube' | 'x';
 
 export type SocialOperation =
 	| 'publish'
@@ -19,6 +19,7 @@ export type SocialOperation =
 
 export const SOCIAL_PLATFORM_OPTIONS = [
 	{ name: 'Instagram', value: 'instagram' },
+	{ name: 'LinkedIn', value: 'linkedin' },
 	{ name: 'TikTok', value: 'tiktok' },
 	{ name: 'X', value: 'x' },
 	{ name: 'YouTube', value: 'youtube' },
@@ -47,6 +48,32 @@ const OPERATIONS_BY_PLATFORM: Record<
 			value: 'cancelScheduled',
 			action: 'Cancel a scheduled Instagram post',
 			description: 'Cancel a pending scheduled Instagram post and refund its credits',
+		},
+	],
+	linkedin: [
+		{
+			name: 'Publish',
+			value: 'publish',
+			action: 'Publish to LinkedIn',
+			description: 'Publish a text, link, image, video or PDF post to LinkedIn, or schedule it',
+		},
+		{
+			name: 'Get Status',
+			value: 'getStatus',
+			action: 'Get LinkedIn publish status',
+			description: 'Look up the outcome of a LinkedIn publish by log ID',
+		},
+		{
+			name: 'List Scheduled',
+			value: 'listScheduled',
+			action: 'List scheduled LinkedIn posts',
+			description: 'List scheduled LinkedIn posts',
+		},
+		{
+			name: 'Cancel Scheduled',
+			value: 'cancelScheduled',
+			action: 'Cancel a scheduled LinkedIn post',
+			description: 'Cancel a pending scheduled LinkedIn post',
 		},
 	],
 	tiktok: [
@@ -117,7 +144,7 @@ const OPERATIONS_BY_PLATFORM: Record<
 	],
 };
 
-const PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'x'];
+const PLATFORMS: SocialPlatform[] = ['instagram', 'linkedin', 'tiktok', 'youtube', 'x'];
 
 /** Operation picker, shown once per platform. */
 const operationFields: INodeProperties[] = PLATFORMS.map((platform) => ({
@@ -216,6 +243,80 @@ const instagramFields: INodeProperties[] = [
 	},
 	scheduleField('instagram'),
 	scheduledPostIdField('instagram'),
+];
+
+const linkedinFields: INodeProperties[] = [
+	{
+		displayName: 'Text',
+		name: 'text',
+		type: 'string',
+		typeOptions: { rows: 4 },
+		default: '',
+		required: true,
+		description: 'Post content, up to 3000 characters',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	{
+		displayName: 'Media URLs',
+		name: 'mediaUrls',
+		type: 'string',
+		default: '',
+		description:
+			'Comma-separated URLs hosted on eranol.com or in your Media Library: up to 9 images, OR one video (mp4/mov), OR one PDF. Types cannot be mixed. Upload files with the Media resource.',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	{
+		displayName: 'Document Title',
+		name: 'title',
+		type: 'string',
+		default: '',
+		description: 'Title shown on a PDF document post. Defaults to the file name.',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	{
+		displayName: 'Article URL',
+		name: 'articleUrl',
+		type: 'string',
+		default: '',
+		description: 'Share a link instead of media. Cannot be combined with Media URLs.',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	{
+		displayName: 'Article Title',
+		name: 'articleTitle',
+		type: 'string',
+		default: '',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	{
+		displayName: 'Article Description',
+		name: 'articleDescription',
+		type: 'string',
+		default: '',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	{
+		displayName: 'Visibility',
+		name: 'visibility',
+		type: 'options',
+		options: [
+			{ name: 'Public', value: 'PUBLIC' },
+			{ name: 'Connections Only', value: 'CONNECTIONS' },
+		],
+		default: 'PUBLIC',
+		displayOptions: show('linkedin', 'publish'),
+	},
+	scheduleField('linkedin'),
+	{
+		displayName: 'Log ID',
+		name: 'logId',
+		type: 'string',
+		default: '',
+		required: true,
+		description: 'The log_id returned by the Publish operation',
+		displayOptions: show('linkedin', 'getStatus'),
+	},
+	scheduledPostIdField('linkedin'),
 ];
 
 const tiktokFields: INodeProperties[] = [
@@ -401,6 +502,7 @@ export const socialFields: INodeProperties[] = [
 	},
 	...operationFields,
 	...instagramFields,
+	...linkedinFields,
 	...tiktokFields,
 	...youtubeFields,
 	...xFields,
@@ -443,6 +545,24 @@ export function buildPublishBody(
 		};
 		if (params.caption) body.caption = params.caption;
 		if (params.mediaType === 'REEL') body.share_to_feed = params.shareToFeed;
+		return body;
+	}
+
+	if (platform === 'linkedin') {
+		const body: IDataObject = {
+			text: params.text,
+			visibility: params.visibility,
+			...scheduling,
+		};
+		const linkedinMedia = ((params.mediaUrls as string) || '')
+			.split(',')
+			.map((url) => url.trim())
+			.filter(Boolean);
+		if (linkedinMedia.length > 0) body.media_urls = linkedinMedia;
+		if (params.title) body.title = params.title;
+		if (params.articleUrl) body.article_url = params.articleUrl;
+		if (params.articleTitle) body.article_title = params.articleTitle;
+		if (params.articleDescription) body.article_description = params.articleDescription;
 		return body;
 	}
 

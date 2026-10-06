@@ -53,6 +53,51 @@ function toJsonSafe(data: unknown): IDataObject | IDataObject[] {
 	return { result: data as string | number | boolean };
 }
 
+/** Subset of Node's Buffer static API, taken from the runtime Buffer n8n hands us. */
+interface BufferStatic {
+	from(value: string): unknown;
+	concat(parts: unknown[]): unknown;
+}
+
+/**
+ * Build a single-file multipart/form-data body. The file buffer comes from
+ * n8n's binary helpers, so its constructor is Node's Buffer; reusing it avoids
+ * a Node global this project's tsconfig does not type.
+ */
+function buildMultipartFile(
+	file: object,
+	boundary: string,
+	fieldName: string,
+	fileName: string,
+	mimeType: string,
+): IHttpRequestOptions['body'] {
+	const BufferCtor = file.constructor as unknown as BufferStatic;
+	const safeName = fileName.replace(/["\\\r\n]/g, '_');
+	const head = BufferCtor.from(
+		`--${boundary}\r\nContent-Disposition: form-data; name="${fieldName}"; filename="${safeName}"\r\nContent-Type: ${mimeType}\r\n\r\n`,
+	);
+	const tail = BufferCtor.from(`\r\n--${boundary}--\r\n`);
+	return BufferCtor.concat([head, file, tail]) as IHttpRequestOptions['body'];
+}
+
+const IMAGE_EXTENSION_BY_MIME: Record<string, string> = {
+	'image/jpeg': 'jpg',
+	'image/png': 'png',
+	'image/gif': 'gif',
+	'image/webp': 'webp',
+};
+
+/**
+ * The upload endpoint decides the file type from the file name's extension, so
+ * make sure the name carries one, deriving it from the MIME type if missing.
+ */
+function withImageExtension(fileName: string | undefined, mimeType: string): string {
+	const name = fileName || 'upload';
+	if (/\.(jpe?g|png|gif|webp)$/i.test(name)) return name;
+	const extension = IMAGE_EXTENSION_BY_MIME[mimeType];
+	return extension ? `${name}.${extension}` : name;
+}
+
 /**
  * Universal body UI. For each operation, shown only when that operation is
  * selected: a slim notice linking to the operation's documentation page (n8n
@@ -123,7 +168,12 @@ export class Eranol implements INodeType {
 					{
 						name: 'Social',
 						value: 'social',
-						description: 'Publish and manage scheduled posts on Instagram, TikTok, YouTube, and X',
+						description: 'Publish and manage scheduled posts on Instagram, LinkedIn, TikTok, YouTube, and X',
+					},
+					{
+						name: 'Media',
+						value: 'media',
+						description: 'Upload images to your Eranol Media Library',
 					},
 					{
 						name: 'Job',
@@ -188,7 +238,7 @@ export class Eranol implements INodeType {
 						name: 'Social',
 						value: 'social',
 						action: 'Social',
-						description: 'Publish and manage scheduled posts on Instagram, TikTok, YouTube, and X',
+						description: 'Publish and manage scheduled posts on Instagram, LinkedIn, TikTok, YouTube, and X',
 					},
 				],
 				default: 'social',
@@ -199,6 +249,41 @@ export class Eranol implements INodeType {
 				},
 			},
 			...socialFields,
+			// ── Media ──────────────────────────────────────────────────────────
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['media'],
+					},
+				},
+				options: [
+					{
+						name: 'Upload Image',
+						value: 'uploadImage',
+						action: 'Upload an image',
+						description: 'Upload an image to your Media Library and get a public URL (1 credit per upload)',
+					},
+				],
+				default: 'uploadImage',
+			},
+			{
+				displayName: 'Input Binary Field',
+				name: 'binaryPropertyName',
+				type: 'string',
+				default: 'data',
+				required: true,
+				description:
+					'Name of the binary property holding the image. Allowed: jpg, jpeg, png, gif, webp, max 20 MB.',
+				displayOptions: {
+					show: {
+						resource: ['media'],
+					},
+				},
+			},
 			// ── Job ────────────────────────────────────────────────────────────
 			{
 				displayName: 'Operation',
@@ -303,6 +388,27 @@ export class Eranol implements INodeType {
 				} else {
 					throw new NodeOperationError(this.getNode(), `Unknown job operation: ${operation}`);
 				}
+			} else if (resource === 'media') {
+				// ── Media: multipart image upload to the Media Library ───────────
+				const binaryPropertyName = this.getNodeParameter('binaryPropertyName', i, 'data') as string;
+				const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
+				const buffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
+				const fileName = withImageExtension(binaryData.fileName, binaryData.mimeType);
+
+				const boundary = `----eranol${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`;
+				const multipartBody = buildMultipartFile(buffer, boundary, 'file', fileName, binaryData.mimeType);
+
+				responseData = await request({
+					method: 'POST',
+					url: `${BASE_URL}/media/upload`,
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': `multipart/form-data; boundary=${boundary}`,
+						...authHeaders,
+					},
+					body: multipartBody,
+					json: false,
+				});
 			} else if (resource === 'social') {
 				// ── Social: structured per-platform publish/list/cancel/status ───
 				const platform = this.getNodeParameter('platform', i) as SocialPlatform;
@@ -345,11 +451,18 @@ export class Eranol implements INodeType {
 						madeForKids: this.getNodeParameter('madeForKids', i, false) as boolean,
 						text: this.getNodeParameter('text', i, '') as string,
 						mediaUrls: this.getNodeParameter('mediaUrls', i, '') as string,
+						articleUrl: this.getNodeParameter('articleUrl', i, '') as string,
+						articleTitle: this.getNodeParameter('articleTitle', i, '') as string,
+						articleDescription: this.getNodeParameter('articleDescription', i, '') as string,
+						visibility: this.getNodeParameter('visibility', i, 'PUBLIC') as string,
 						scheduledFor: this.getNodeParameter('scheduledFor', i, '') as string,
 					};
 					body = buildPublishBody(platform, rawParams);
 				} else if (socialOperation === 'getStatus') {
-					qs = { publish_id: this.getNodeParameter('publishId', i) as string };
+					qs =
+						platform === 'linkedin'
+							? { log_id: this.getNodeParameter('logId', i) as string }
+							: { publish_id: this.getNodeParameter('publishId', i) as string };
 				}
 
 				responseData = await request({
