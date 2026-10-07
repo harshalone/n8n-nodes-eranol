@@ -529,6 +529,15 @@ export function getSocialRoute(
 	throw new Error(`Unknown social operation: ${operation}`);
 }
 
+/**
+ * Accepts an array of URLs (e.g. `{{ $json.imageUrls }}`) or a comma/newline
+ * separated string, and returns a clean list of URLs.
+ */
+function parseMediaUrls(value: unknown): string[] {
+	const items = Array.isArray(value) ? value : String(value ?? '').split(/[,\n]/);
+	return items.map((url) => String(url).trim()).filter(Boolean);
+}
+
 /** Build the publish request body for a platform from its resolved node parameters. */
 export function buildPublishBody(
 	platform: SocialPlatform,
@@ -554,10 +563,7 @@ export function buildPublishBody(
 			visibility: params.visibility,
 			...scheduling,
 		};
-		const linkedinMedia = ((params.mediaUrls as string) || '')
-			.split(',')
-			.map((url) => url.trim())
-			.filter(Boolean);
+		const linkedinMedia = parseMediaUrls(params.mediaUrls);
 		if (linkedinMedia.length > 0) body.media_urls = linkedinMedia;
 		if (params.title) body.title = params.title;
 		if (params.articleUrl) body.article_url = params.articleUrl;
@@ -609,12 +615,7 @@ export function buildPublishBody(
 		text: params.text,
 		...scheduling,
 	};
-	const mediaUrls = (params.mediaUrls as string) || '';
-	if (mediaUrls.trim()) {
-		body.media_urls = mediaUrls
-			.split(',')
-			.map((url) => url.trim())
-			.filter(Boolean);
-	}
+	const xMedia = parseMediaUrls(params.mediaUrls);
+	if (xMedia.length > 0) body.media_urls = xMedia;
 	return body;
 }
