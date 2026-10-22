@@ -697,7 +697,7 @@ export const OPERATIONS: EranolOperation[] = [
 	{
 		name: 'Image Render',
 		value: 'imageRender',
-		description: 'Render infographic scenes as PNG images, one per scene (10 credits)',
+		description: 'Render infographic scenes as PNG images, one per scene (1 credit)',
 		method: 'POST',
 		url: '/ffmpeg/image/render',
 		docs: `${DOCS}/ffmpeg-api-for-image-render`,
