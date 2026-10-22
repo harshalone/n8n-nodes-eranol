@@ -611,6 +611,112 @@ export const OPERATIONS: EranolOperation[] = [
 		],
 	},
 	{
+		name: 'Animate',
+		value: 'animate',
+		description: 'Render timed infographic scenes over a talking-head video (10 credits)',
+		method: 'POST',
+		url: '/ffmpeg/video/animate',
+		docs: `${DOCS}/ffmpeg-api-for-animate`,
+		examples: [
+			{
+				label: 'One stat scene',
+				body: {
+					video_url: 'https://cdn.example.com/talking-head.mp4',
+					type: 'split_infographic',
+					scenes: [
+						{
+							start: 0,
+							end: 5,
+							template: 'stat_countup',
+							kicker: 'SAVINGS',
+							title: 'Total saved',
+							accent: 'green',
+							value: 2500,
+							prefix: '£',
+							bar_max: 5000,
+							label: 'THIS YEAR',
+							at: 0.7,
+						},
+					],
+				},
+			},
+			{
+				label: 'Captioned, two scenes',
+				body: {
+					video_url: 'https://cdn.example.com/talking-head.mp4',
+					type: 'split_infographic',
+					captions: { srt_url: 'https://cdn.example.com/captions.srt', font_size: 64 },
+					scenes: [
+						{
+							start: 0,
+							end: 6,
+							template: 'rows',
+							kicker: 'CHECKLIST',
+							title: 'Before you sign',
+							items: [
+								{ text: 'READ THE CONTRACT', at: 0.5 },
+								{ text: 'CHECK THE FEES', at: 2.5 },
+								{ text: 'VERBAL PROMISES', at: 4.5, state: 'reject' },
+							],
+						},
+						{
+							start: 6,
+							end: 12,
+							template: 'ring_percent',
+							kicker: 'SUCCESS RATE',
+							title: 'Claims approved',
+							accent: 'purple',
+							percent: 87,
+							label: 'APPROVED',
+							at: 7,
+						},
+					],
+				},
+			},
+			{
+				label: 'Fullscreen overlay',
+				body: {
+					video_url: 'https://cdn.example.com/talking-head.mp4',
+					type: 'fullscreen_overlay',
+					scenes: [
+						{
+							start: 3,
+							end: 8,
+							template: 'logo_flow',
+							kicker: 'PARTNER',
+							title: 'Backed by a known brand',
+							logo_domain: 'example.com',
+							to_icon: 'users',
+							at: [3.5, 4.5, 5.5],
+						},
+					],
+				},
+			},
+		],
+	},
+	{
+		name: 'Audio to Video',
+		value: 'audioToVideo',
+		description: 'Build a video from a voiceover and timed image/video segments',
+		method: 'POST',
+		url: '/ffmpeg/audio/to-video',
+		docs: `${DOCS}/ffmpeg-api-for-audio-to-video`,
+		examples: [
+			{
+				label: 'Voiceover + segments',
+				body: {
+					voiceover_url: 'https://example.com/voiceover.wav',
+					width: 1080,
+					height: 1920,
+					segments: [
+						{ type: 'image', url: 'https://picsum.photos/1080/1920.jpg', start_time: 0, end_time: 4 },
+						{ type: 'video', url: 'https://cdn.example.com/clip.mp4', start_time: 4, end_time: 9 },
+					],
+				},
+			},
+		],
+	},
+	{
 		name: 'Merge',
 		value: 'merge',
 		description: 'Merge images and audio into a video',

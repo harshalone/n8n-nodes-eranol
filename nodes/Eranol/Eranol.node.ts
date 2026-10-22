@@ -297,10 +297,16 @@ export class Eranol implements INodeType {
 				},
 				options: [
 					{
-						name: 'Get Status',
-						value: 'getStatus',
-						action: 'Get job status',
-						description: 'Retrieve current job status, progress, and completion data',
+						name: 'Delete',
+						value: 'deleteJob',
+						action: 'Delete a job',
+						description: 'Remove a job and its associated output file',
+					},
+					{
+						name: 'Get Image Status',
+						value: 'getImageStatus',
+						action: 'Get image generation status',
+						description: 'Retrieve the status and result URL of an image generation job',
 					},
 					{
 						name: 'Get Result',
@@ -309,10 +315,16 @@ export class Eranol implements INodeType {
 						description: 'Get the result of a completed job',
 					},
 					{
-						name: 'Delete',
-						value: 'deleteJob',
-						action: 'Delete a job',
-						description: 'Remove a job and its associated output file',
+						name: 'Get Status',
+						value: 'getStatus',
+						action: 'Get job status',
+						description: 'Retrieve current job status, progress, and completion data',
+					},
+					{
+						name: 'Verify API Key',
+						value: 'verify',
+						action: 'Verify API key',
+						description: 'Check that your Eranol API key is valid and active',
 					},
 				],
 				default: 'getStatus',
@@ -327,6 +339,7 @@ export class Eranol implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['job'],
+						operation: ['getStatus', 'getResult', 'getImageStatus', 'deleteJob'],
 					},
 				},
 			},
@@ -362,9 +375,24 @@ export class Eranol implements INodeType {
 
 			if (resource === 'job') {
 				const operation = this.getNodeParameter('operation', i) as string;
-				const jobId = this.getNodeParameter('jobId', i) as string;
+				const jobId =
+					operation === 'verify' ? '' : (this.getNodeParameter('jobId', i) as string);
 
-				if (operation === 'getStatus') {
+				if (operation === 'verify') {
+					responseData = await request({
+						method: 'GET',
+						url: `${BASE_URL}/verify`,
+						headers: { Accept: 'application/json', ...authHeaders },
+						json: true,
+					});
+				} else if (operation === 'getImageStatus') {
+					responseData = await request({
+						method: 'GET',
+						url: `${BASE_URL}/image/status/${jobId}`,
+						headers: { Accept: 'application/json', ...authHeaders },
+						json: true,
+					});
+				} else if (operation === 'getStatus') {
 					responseData = await request({
 						method: 'GET',
 						url: `${BASE_URL}/ffmpeg/status/${jobId}`,
