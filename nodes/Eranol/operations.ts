@@ -695,6 +695,63 @@ export const OPERATIONS: EranolOperation[] = [
 		],
 	},
 	{
+		name: 'Image Render',
+		value: 'imageRender',
+		description: 'Render infographic scenes as PNG images, one per scene (10 credits)',
+		method: 'POST',
+		url: '/ffmpeg/image/render',
+		docs: `${DOCS}/ffmpeg-api-for-image-render`,
+		examples: [
+			{
+				label: 'LinkedIn carousel',
+				body: {
+					size: 'portrait',
+					scenes: [
+						{
+							template: 'stat_countup',
+							kicker: 'THE NUMBER',
+							title: 'Claims paid',
+							value: 4200,
+							prefix: '£',
+						},
+						{
+							template: 'hbar_compare',
+							title: 'Fault split',
+							bars: [
+								{ label: 'Driver A', value_text: '62%', ratio: 0.62 },
+								{ label: 'Driver B', value_text: '38%', ratio: 0.38, accent: 'orange' },
+							],
+						},
+						{
+							template: 'rows',
+							title: "Do and don't",
+							items: [
+								{ text: 'Photograph the scene', state: 'keep' },
+								{ text: 'Admit fault', state: 'reject' },
+							],
+						},
+						{ template: 'logo_flow', title: 'Report it to', logo_domain: 'gov.uk', arrow: true },
+					],
+				},
+			},
+			{
+				label: 'Instagram story',
+				body: {
+					size: 'story',
+					scenes: [
+						{
+							template: 'ring_percent',
+							title: 'Who is at fault',
+							percent: 46,
+							label: 'AT FAULT',
+							accent: 'purple',
+						},
+					],
+				},
+			},
+		],
+	},
+	{
 		name: 'Audio to Video',
 		value: 'audioToVideo',
 		description: 'Build a video from a voiceover and timed image/video segments',
